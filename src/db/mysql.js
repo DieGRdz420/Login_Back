@@ -38,11 +38,20 @@ con_mysql();
 
 const TODOS = (tabla) => {
     return new Promise((resolve, reject) => {
-        conexion.query(`
+        var query = "";
+        if(tabla != "roles") {
+            query = `
             SELECT ${tabla}.id, ${tabla}.nombre, ${tabla}.email, roles.rol
             FROM ${tabla}
             INNER JOIN roles ON ${tabla}.id_rol = roles.id
-        `, (error, result) => {
+            `;
+        } else {
+            query = `
+            SELECT *
+            FROM ${tabla}
+            `;  
+        }
+        conexion.query(query, (error, result) => {
             if (error) {
                 return reject(error);
             } else {
